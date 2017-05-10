@@ -20,6 +20,17 @@ github = oauth.remote_app(
 )
 
 
+@app.before_request
+def before_request():
+    """
+    Registers a function to run before each request.
+    The function will be called without any arguments. If the function returns a non-None value, 
+    it’s handled as if it was the return value from the view and further request handling is stopped.
+    """
+    if not 'github_token' in session:
+        return redirect(url_for('login'))
+
+
 @app.route('/')
 def index():
     if 'github_token' in session:
